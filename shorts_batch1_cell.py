@@ -193,3 +193,10 @@ bad = [r for r in report if r['match'] < QC_MIN_SCORE]
 print('Done:', round(full.shape[1] / 60 / SR, 1), 'minutes -> /kaggle/working/TAL_narration.wav')
 print(f'Quality check: {total - len(bad)}/{total} lines clean.' + (' Listen to these:' if bad else ''))
 for r in bad: print(f"  line {r['line']}: wanted '{r['text'][:60]}'  heard '{r['heard'][:60]}'")
+
+# --- Auto-hand-off to Claude: upload the narration to a 1-hour temporary link ---
+import subprocess
+_r = subprocess.run(['curl', '-s', '-F', 'reqtype=fileupload', '-F', 'time=1h',
+                     '-F', 'fileToUpload=@/kaggle/working/TAL_narration.wav',
+                     'https://litterbox.catbox.moe/resources/internals/api.php'], capture_output=True, text=True)
+print('CLAUDE LINK:', _r.stdout.strip())

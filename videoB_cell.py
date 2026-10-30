@@ -185,6 +185,13 @@ PRON = {
     'Fed': 'Fed',
     'LNG': 'L. N. G.',
     'AI': 'A. I.',
+    'Jiang Xueqin': 'Jee-ahng Shweh-cheen',
+    'Jiang': 'Jee-ahng',
+    'Shenzhen': 'Shen-jen',
+    'NFL': 'N. F. L.',
+    'CEO': 'C. E. O.',
+    'Emirati': 'Em-ih-rah-tee',
+    'riyal': 'ree-yahl',
 }
 
 # ---- generation (no need to touch below) ----

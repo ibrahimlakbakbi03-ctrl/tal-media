@@ -1,0 +1,203 @@
+# VIDEO B "Is the Dollar About to Collapse?" + SHORTS BATCH 2 · ONE RUN (v3, 30 Oct)
+# Run Cell 1, then Cell 2, then run Cell 3 with the one-line loader. Then Cell 5 to listen.
+# Format: [energy, pace] text  ·  ~ glues to previous line  ·  (beat) pause  ·  empty line = new section  ·  # = note
+
+SCRIPT = """
+# SHORTS BATCH 2 v2 (1 Nov): hooks of 8 words or fewer. Each section = one Short.
+
+# S5 · BRIDGE (Video B)
+[0.75,0.35] Your savings... worth zero. Within months?
+[0.65,0.4] A professor with nearly three million subscribers says it could happen.
+[0.65,0.4] He called Trump's comeback. He called the war with Iran.
+[0.6,0.42] So we checked his money claims. Seven of them.
+[0.65,0.4] Some are true. Some are false.
+[0.75,0.35] And one number... says the exact opposite.
+[0.6,0.45] Full check on our channel.
+
+# S6 · MONEY MYTHS #1 · NFL BROKE
+[0.75,0.35] Seventy-eight percent of NFL players go broke? Wrong.
+[0.6,0.42] That number came from a magazine in two thousand nine. And it mixed bankrupt with financial stress.
+[0.6,0.42] Economists then checked court records for about two thousand players.
+[0.75,0.35] The real number: about sixteen percent went bankrupt... within twelve years.
+[0.7,0.4] Verdict: exaggerated.
+[0.65,0.4] But here's the twist. A long, rich career barely protected them.
+[0.75,0.35] More money didn't save them. Habits do.
+
+# S7 · MONEY MYTHS #2 · CHINA OWNS AMERICA
+[0.75,0.35] Every American owes a hundred and eighteen thousand dollars. Even babies.
+[0.65,0.4] That's America's forty point five trillion dollar debt, split up.
+[0.6,0.42] So who is it owed to? Most people say China.
+[0.75,0.35] China holds about six hundred billion. Less than two percent.
+[0.6,0.42] All foreign countries together? About a quarter.
+[0.6,0.42] The rest is owed to Americans themselves. Pension funds, banks, the Fed, and the government's own trust funds.
+[0.7,0.4] Verdict on China owns America: false.
+[0.75,0.35] America mostly owes... itself.
+
+# S8 · MONEY MYTHS #3 · GOLD AT THE TOP
+[0.75,0.35] He bought gold in nineteen eighty. Then waited forty-five years.
+[0.65,0.4] January nineteen eighty: gold hits eight hundred and fifty dollars an ounce. Everyone is buying.
+[0.75,0.35] Adjust for inflation, and he was underwater... the whole time.
+[0.6,0.42] Gold only beat that peak, in today's money, in twenty twenty-five.
+[0.65,0.4] So does gold always protect your money?
+[0.7,0.4] Verdict: half true. Over a lifetime, it can.
+[0.75,0.35] But buy in a panic, at the top... and it can take half of one.
+[0.65,0.4] So when someone sells you gold because the end is near... ask what price you're paying.
+"""
+
+DEFAULT_EX, DEFAULT_CFG, DEFAULT_SPEED = 0.55, 0.45, 1.0
+TEMPERATURE = 0.8      # default: keeps the voice consistent line to line
+USE_SPEED = False      # speed changes after generation hurt clarity; rhythm comes from pace + pauses
+SEEDS = [42, 7, 123]   # take 1 uses 42 (Tall's usual timbre); retakes only if a line fails the check
+SECTION_PAUSE = 1.0
+BEAT_PAUSE = 0.75
+GLUE_PAUSE = 0.12
+QC = True              # listen-back check: transcribe every line and retake if words are wrong
+QC_MIN_SCORE = 0.85    # share of words that must come back correctly
+
+# PRONUNCIATION GUIDE: the script stays normal; Tall is fed these spellings.
+# Add a word here whenever you hear it said wrong. Keys are matched as whole words, case-sensitive.
+PRON = {
+    'Rystad': 'Ree-stahd',
+    'Kuwaiti': 'Koo-way-tee',
+    'Iraqi': 'Ih-rah-kee',
+    'Axios': 'Ack-see-ose',
+    'MI6': 'M. I. six',
+    'GENIUS Act': 'Genius Act',
+    'Putin': 'Poo-tin',
+    'Rabat': 'Rah-baht',
+    'Hormuz': 'Hor-mooz',
+    'Zelenskyy': 'Zeh-len-skee',
+    'Yalta': 'Yahl-tah',
+    'Fed': 'Fed',
+    'LNG': 'L. N. G.',
+    'AI': 'A. I.',
+    'Jiang Xueqin': 'Jee-ahng Shweh-cheen',
+    'Jiang': 'Jee-ahng',
+    'Shenzhen': 'Shen-jen',
+    'NFL': 'N. F. L.',
+    'CEO': 'C. E. O.',
+    'Emirati': 'Em-ih-rah-tee',
+    'riyal': 'ree-yahl',
+}
+
+# ---- generation (no need to touch below) ----
+import re, os, random, subprocess, sys, json, difflib
+import torch, torchaudio, librosa, numpy as np
+from chatterbox.tts import ChatterboxTTS
+random.seed(7)
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+if 'model' not in globals():
+    model = ChatterboxTTS.from_pretrained(device=device)
+SR = model.sr
+
+asr = None
+if QC:
+    try:
+        from faster_whisper import WhisperModel
+    except ImportError:
+        subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', 'faster-whisper'], check=False)
+        from faster_whisper import WhisperModel
+    asr = WhisperModel('small.en', device=device, compute_type='float16' if device == 'cuda' else 'int8')
+
+def spoken(text):
+    for k, v in sorted(PRON.items(), key=lambda kv: -len(kv[0])):
+        text = re.sub(r'(?<![\w-])' + re.escape(k) + r'(?![\w-])', v, text)
+    return text
+
+SKIP = {w.lower() for k in PRON for w in re.findall(r"[A-Za-z']+", k)}
+def norm(t):
+    return [w for w in re.findall(r"[a-z']+", t.lower().replace('-', ' ')) if w not in SKIP]
+
+def qc_score(wav, text):
+    y = wav.squeeze(0).cpu().numpy().astype(np.float32)
+    y16 = librosa.resample(y, orig_sr=SR, target_sr=16000)
+    segs, _ = asr.transcribe(y16, language='en', beam_size=1)
+    heard = ' '.join(s.text for s in segs)
+    a, b = norm(text), norm(heard)
+    if not a: return 1.0, heard
+    return difflib.SequenceMatcher(None, a, b).ratio(), heard
+
+def sil(sec): return torch.zeros(1, int(SR * max(sec, 0)))
+
+def natural_pause(text):
+    t = text.rstrip()
+    if t.endswith('?'):   base = 0.55
+    elif t.endswith('...'): base = 0.45
+    elif t.endswith('!'): base = 0.4
+    elif len(t) < 30:     base = 0.25
+    else:                 base = 0.35
+    return base + random.uniform(-0.08, 0.1)
+
+def stretch(wav, speed):
+    if not USE_SPEED or abs(speed - 1.0) < 0.01: return wav
+    y = librosa.effects.time_stretch(wav.squeeze(0).cpu().numpy(), rate=speed)
+    return torch.from_numpy(np.ascontiguousarray(y)).unsqueeze(0)
+
+def trim(wav, thr=0.01):
+    y = wav.squeeze(0)
+    idx = (y.abs() > thr).nonzero()
+    if len(idx) == 0: return wav
+    a, b = max(int(idx[0]) - int(0.02*SR), 0), min(int(idx[-1]) + int(0.06*SR), y.shape[0])
+    return wav[:, a:b]
+
+os.makedirs('/kaggle/working/lines', exist_ok=True)
+items = []
+for raw in SCRIPT.strip().splitlines():
+    s = raw.strip()
+    if s.startswith('#'): continue
+    if not s: items.append(('section', None)); continue
+    if s == '(beat)': items.append(('beat', None)); continue
+    glue = s.startswith('~'); s = s.lstrip('~').strip()
+    m = re.match(r'^\[([^\]]*)\]\s*(.*)$', s)
+    nums = [float(x) for x in m.group(1).split(',')] if m else []
+    text = m.group(2) if m else s
+    ex  = nums[0] if len(nums) > 0 else DEFAULT_EX
+    cfg = nums[1] if len(nums) > 1 else DEFAULT_CFG
+    spd = nums[2] if len(nums) > 2 else DEFAULT_SPEED
+    items.append(('line', (glue, ex, cfg, spd, text)))
+
+total = sum(1 for k, _ in items if k == 'line')
+out, n, pending, report = [], 0, None, []
+for kind, val in items:
+    if kind == 'section': pending = SECTION_PAUSE; continue
+    if kind == 'beat':    pending = max(pending or 0, BEAT_PAUSE); continue
+    glue, ex, cfg, spd, text = val
+    n += 1
+    cfg = min(max(cfg, 0.35), 0.5)
+    ex = min(ex, 0.75)
+    say = spoken(text)
+    best = None
+    for t, seed in enumerate(SEEDS):
+        torch.manual_seed(seed)
+        wav = model.generate(say, audio_prompt_path=REF, exaggeration=ex, cfg_weight=cfg, temperature=TEMPERATURE)
+        wav = trim(stretch(wav.cpu(), spd))
+        score, heard = qc_score(wav, text) if asr else (1.0, '')
+        if best is None or score > best[0]: best = (score, wav, heard, t + 1)
+        if score >= QC_MIN_SCORE: break
+    score, wav, heard, takes = best
+    flag = '' if score >= QC_MIN_SCORE else '   <-- CHECK THIS LINE'
+    print(f'[{n}/{total}] take {takes} · match {score:.0%}: {text[:60]}{flag}')
+    report.append({'line': n, 'text': text, 'heard': heard, 'match': round(score, 3), 'takes': takes})
+    torchaudio.save(f'/kaggle/working/lines/line_{n:03d}.wav', wav, SR)
+    f = int(0.01*SR); ramp = torch.linspace(0, 1, f)
+    wav[:, :f] *= ramp; wav[:, -f:] *= ramp.flip(0)
+    if out:
+        gap = pending if pending is not None else (GLUE_PAUSE if glue else natural_pause(last_text))
+        out.append(sil(gap))
+    out.append(wav); last_text, pending = text, None
+
+full = torch.cat(out, dim=1)
+torchaudio.save('/kaggle/working/TAL_shorts_b2.wav', full, SR)
+json.dump(report, open('/kaggle/working/qc_report.json', 'w'), indent=1)
+bad = [r for r in report if r['match'] < QC_MIN_SCORE]
+print('Done:', round(full.shape[1] / 60 / SR, 1), 'minutes -> /kaggle/working/TAL_shorts_b2.wav')
+print(f'Quality check: {total - len(bad)}/{total} lines clean.' + (' Listen to these:' if bad else ''))
+for r in bad: print(f"  line {r['line']}: wanted '{r['text'][:60]}'  heard '{r['heard'][:60]}'")
+
+# --- Auto-hand-off to Claude: upload the narration to a 1-hour temporary link ---
+import subprocess
+_r = subprocess.run(['curl', '-s', '-F', 'reqtype=fileupload', '-F', 'time=1h',
+                     '-F', 'fileToUpload=@/kaggle/working/TAL_shorts_b2.wav',
+                     'https://litterbox.catbox.moe/resources/internals/api.php'], capture_output=True, text=True)
+print('CLAUDE LINK:', _r.stdout.strip())

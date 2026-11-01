@@ -1,0 +1,65 @@
+# SHORTS BATCH 3 · MONEY MYTHS (draft 1 Nov). Each section = one Short.
+
+# S9 · WEIMAR 1923
+[0.75,0.35] A loaf of bread: two hundred billion marks.
+[0.7,0.4] Berlin, late nineteen twenty-three. A year earlier, that loaf cost about one hundred sixty.
+[0.7,0.4] The claim: prices doubled every few days.
+[0.7,0.4] Economists Steve Hanke and Nicholas Krus measured it. October nineteen twenty-three: prices doubling every three point seven days.
+[0.7,0.4] Verdict: true.
+[0.7,0.4] If your savings sat in a bank, they vanished.
+[0.75,0.35] Twist: debts vanished too. A pre-war mortgage could be paid off for less than that loaf of bread.
+
+# S10 · TULIP MANIA
+[0.75,0.35] One tulip bulb for a house?
+[0.7,0.4] Holland, sixteen thirty-seven. The story: people traded homes for flowers, then the crash ruined merchants.
+[0.7,0.4] Historian Anne Goldgar went into the Dutch archives.
+[0.7,0.4] Rare bulbs really sold for around eleven hundred guilders. A decent house.
+[0.7,0.4] But she found almost no bankruptcies tied to tulips, and no lasting depression. Most buyers simply never paid.
+[0.7,0.4] Verdict: exaggerated.
+[0.75,0.35] Twist: the house price was real. The ruin was the myth, spread by preachy pamphlets and a bestseller written two centuries later.
+
+# S11 · NEWTON
+[0.75,0.35] Isaac Newton lost twenty thousand pounds. Supposedly.
+[0.7,0.4] Seventeen twenty. South Sea Company shares explode.
+[0.7,0.4] Legend says the genius lost everything, sighing he could calculate the stars, but not human madness.
+[0.7,0.4] Mathematician Andrew Odlyzko checked the records.
+[0.7,0.4] Newton sold early, up about twenty thousand. Then, like you might, he chased it back in near the top.
+[0.7,0.4] He lost roughly ten thousand. Not ruin. And that quote? No solid source.
+[0.7,0.4] Verdict: exaggerated.
+[0.75,0.35] Twist: twenty thousand pounds wasn't his loss. It was his profit. The one he gave back.
+
+# S12 · VENEZUELA
+[0.75,0.35] Venezuela deleted fourteen zeros from its money.
+[0.7,0.4] Three in two thousand eight. Five in twenty eighteen. Six more in twenty twenty-one.
+[0.7,0.4] The famous claim: inflation hit one million percent in twenty eighteen.
+[0.7,0.4] That was an IMF forecast. The central bank later reported about one hundred thirty thousand percent.
+[0.7,0.4] Verdict: exaggerated. But prices still doubled roughly every five weeks.
+[0.7,0.4] Cutting zeros didn't save anyone's savings. It just shortened the numbers.
+[0.75,0.35] Twist: fourteen zeros means one bolivar today equals one hundred trillion old ones.
+
+# S13 · PENNY
+[0.75,0.35] One penny costs almost four cents to make.
+[0.7,0.4] That's the US Mint's own number: three point six nine cents, up from one point four two a decade ago.
+[0.7,0.4] The claim: America stopped making pennies.
+[0.7,0.4] November twelfth, twenty twenty-five: the Mint struck its final circulating penny in Philadelphia.
+[0.7,0.4] Verdict: true.
+[0.7,0.4] But your pennies aren't dead. About three hundred billion are still out there.
+[0.75,0.35] Twist: the newest pennies in your jar cost almost four times their face value to make.
+
+# S14 · ROME
+[0.75,0.35] Rome's silver coin: ninety-five percent... then five.
+[0.7,0.4] Under Augustus, the denarius was about ninety-five percent silver.
+[0.7,0.4] Around two hundred AD, under Septimius Severus: half.
+[0.7,0.4] Then a new coin, valued at two denarii, with only one and a half times the silver.
+[0.7,0.4] By the two-sixties: about five percent. Bronze with a silver wash.
+[0.7,0.4] The claim: Rome slowly drained the silver out of its own money. Verdict: true, over two centuries.
+[0.75,0.35] Twist: same face, same name, five percent silver. For your money, the question is never the name. It's what's inside.
+
+# S15 · SWISS FRANC
+[0.75,0.35] One morning, the Swiss franc jumped thirty percent.
+[0.7,0.4] January fifteenth, twenty fifteen. Switzerland's central bank dropped its cap of one point two francs per euro.
+[0.7,0.4] Within minutes, one euro bought just eighty-five centimes.
+[0.7,0.4] The claim: the franc protects your money from inflation.
+[0.7,0.4] In twenty twenty-two, Swiss inflation peaked at three and a half percent. The eurozone hit ten point six.
+[0.7,0.4] Verdict: true, historically.
+[0.75,0.35] Twist: that's exactly why it jumped thirty percent. Safe doesn't mean stable.

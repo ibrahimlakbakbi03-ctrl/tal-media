@@ -1,4 +1,4 @@
-# SHORTS BATCH 3 · MONEY MYTHS (draft 1 Nov). Each section = one Short.
+# SHORTS BATCH 3 · MONEY MYTHS (v2, 2 Nov: fact-check fixes). Each section = one Short.
 
 # S9 · WEIMAR 1923
 [0.75,0.35] A loaf of bread: two hundred billion marks.
@@ -7,7 +7,7 @@
 [0.7,0.4] Economists Steve Hanke and Nicholas Krus measured it. October nineteen twenty-three: prices doubling every three point seven days.
 [0.7,0.4] Verdict: true.
 [0.7,0.4] If your savings sat in a bank, they vanished.
-[0.75,0.35] Twist: debts vanished too. A pre-war mortgage could be paid off for less than that loaf of bread.
+[0.75,0.35] Twist: debts melted too. Even after a rescue law in nineteen twenty-five, mortgages came back at just a quarter of their value.
 
 # S10 · TULIP MANIA
 [0.75,0.35] One tulip bulb for a house?
@@ -47,19 +47,19 @@
 [0.75,0.35] Twist: the newest pennies in your jar cost almost four times their face value to make.
 
 # S14 · ROME
-[0.75,0.35] Rome's silver coin: ninety-five percent... then five.
+[0.75,0.35] Rome's silver coin: ninety-five percent... then two.
 [0.7,0.4] Under Augustus, the denarius was about ninety-five percent silver.
 [0.7,0.4] Around two hundred AD, under Septimius Severus: half.
 [0.7,0.4] Then a new coin, valued at two denarii, with only one and a half times the silver.
-[0.7,0.4] By the two-sixties: about five percent. Bronze with a silver wash.
+[0.7,0.4] By the two-seventies: about two percent. Bronze with a silver wash.
 [0.7,0.4] The claim: Rome slowly drained the silver out of its own money. Verdict: true, over two centuries.
-[0.75,0.35] Twist: same face, same name, five percent silver. For your money, the question is never the name. It's what's inside.
+[0.75,0.35] Twist: same face, same name, two percent silver. For your money, the question is never the name. It's what's inside.
 
 # S15 · SWISS FRANC
-[0.75,0.35] One morning, the Swiss franc jumped thirty percent.
+[0.75,0.35] One morning, the Swiss franc jumped about thirty percent.
 [0.7,0.4] January fifteenth, twenty fifteen. Switzerland's central bank dropped its cap of one point two francs per euro.
-[0.7,0.4] Within minutes, one euro bought just eighty-five centimes.
+[0.7,0.4] Within minutes, the euro crashed below ninety centimes.
 [0.7,0.4] The claim: the franc protects your money from inflation.
 [0.7,0.4] In twenty twenty-two, Swiss inflation peaked at three and a half percent. The eurozone hit ten point six.
 [0.7,0.4] Verdict: true, historically.
-[0.75,0.35] Twist: that's exactly why it jumped thirty percent. Safe doesn't mean stable.
+[0.75,0.35] Twist: that's exactly why it jumped. Safe doesn't mean stable.

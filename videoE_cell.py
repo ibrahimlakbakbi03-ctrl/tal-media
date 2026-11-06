@@ -3,46 +3,16 @@
 # Format: [energy, pace] text  ·  ~ glues to previous line  ·  (beat) pause  ·  empty line = new section  ·  # = note
 
 SCRIPT = """
-# PAPE LINES (Payp)
-[0.7,0.4] Robert Pape, one of America's top experts on war and bombing, says we've just entered "the eight most dangerous weeks since this war began".
-
-[0.65,0.4] Robert Pape teaches political science at the University of Chicago. He wrote "Bombing to Win", a book on why bombing campaigns so often fail.
-
-[0.6,0.45] Here's Pape's call, in his words.
-
-[0.7,0.4] Which is exactly Pape's point about Iran. Bombing first. Then ground forces.
-
-[0.7,0.4] So far, it looks more like Jiang's "flare-ups" than Pape's big escalation. But it's day three of fifty-six.
-
+# PAPE RETAKES
 [0.65,0.4] Point for Pape. But both of those were short, limited campaigns. Days, not weeks.
 
 [0.6,0.45] That's closer to Jiang's "there may be some bombings" than to Pape's forty-three days.
-
-[0.75,0.35] If Marines seize it, as Jiang says won't happen and Pape's logic suggests could, that oil goes offline overnight.
-
-[0.7,0.4] In Pape's world: oil spikes, gold rises, stocks fall. In Jiang's world: oil drifts lower until January. Then the risk comes back.
 
 [0.65,0.4] If oil jumps and stock indexes fall hard, the market is pricing in Pape.
 
 [0.6,0.45] And if the political temperature in Washington starts rising after the vote, that tips it toward Pape.
 
-[0.6,0.45] One: a major US bombing campaign against Iran's power or water plants. Pape says likely. Jiang says no.
-
 [0.6,0.45] Two: US forces seizing Kharg or Qeshm Island. Pape points that way. Jiang says no.
-
-[0.6,0.45] Four: Russian strikes that knock out most of the power in Ukraine's big cities around Thanksgiving. Pape says yes.
-
-[0.6,0.45] Five: Brent above a hundred and ten dollars. Pape's world says yes. Jiang's world says no.
-
-[0.7,0.4] If most of these happen, Pape wins. If none of them happen, Jiang wins.
-
-[0.65,0.4] And we won't stop there. Jiang says US ground troops in Iran by March. Pape says twenty twenty-seven gets worse.
-
-[0.65,0.4] Two: don't bet everything on one forecaster. Pape and Jiang are both smart, and both have been wrong this year.
-
-[0.7,0.4] If all three move the wrong way together, Pape's eight weeks have started. If they stay calm, Jiang is winning.
-
-[0.65,0.4] So who do you believe? Pape or Jiang? Write the name in the comments.
 
 """
 
@@ -159,7 +129,7 @@ def qc_score(wav, text):
 
 # Name guard: a take is rejected if the ASR hears a bad version of a protected name (e.g. 'pay-pee' for Pape)
 NAME_GUARD = {'Pape': re.compile(r"pay[- ]?pe?e|pay[- ]?p+\b|\bpope\b|\bpay points|\bpeip|\bpap(e)?y\b|\bpapi\b|pappy|\bpaper\b|papee|pa-pe|peppy", re.I)}
-GUARD_SEEDS = [42, 7, 123, 2024, 99, 314]
+GUARD_SEEDS = [11, 23, 57, 88, 101, 202, 303, 404, 505, 606]
 def guard_ok(text, heard):
     for name, bad in NAME_GUARD.items():
         if name in text and bad.search(heard): return False
@@ -237,16 +207,16 @@ for kind, val in items:
     out.append(wav); last_text, pending = text, None
 
 full = torch.cat(out, dim=1)
-torchaudio.save('/kaggle/working/TAL_videoE_pape.wav', full, SR)
-json.dump(report, open('/kaggle/working/qc_report_pape.json', 'w'), indent=1)
+torchaudio.save('/kaggle/working/TAL_videoE_pape2.wav', full, SR)
+json.dump(report, open('/kaggle/working/qc_report_pape2.json', 'w'), indent=1)
 bad = [r for r in report if r['match'] < QC_MIN_SCORE]
-print('Done:', round(full.shape[1] / 60 / SR, 1), 'minutes -> /kaggle/working/TAL_videoE_pape.wav')
+print('Done:', round(full.shape[1] / 60 / SR, 1), 'minutes -> /kaggle/working/TAL_videoE_pape2.wav')
 print(f'Quality check: {total - len(bad)}/{total} lines clean.' + (' Listen to these:' if bad else ''))
 for r in bad: print(f"  line {r['line']}: wanted '{r['text'][:60]}'  heard '{r['heard'][:60]}'")
 
 # --- Auto-hand-off to Claude: upload the narration to a 1-hour temporary link ---
 import subprocess
 _r = subprocess.run(['curl', '-s', '-F', 'reqtype=fileupload', '-F', 'time=1h',
-                     '-F', 'fileToUpload=@/kaggle/working/TAL_videoE_pape.wav',
+                     '-F', 'fileToUpload=@/kaggle/working/TAL_videoE_pape2.wav',
                      'https://litterbox.catbox.moe/resources/internals/api.php'], capture_output=True, text=True)
 print('CLAUDE LINK:', _r.stdout.strip())

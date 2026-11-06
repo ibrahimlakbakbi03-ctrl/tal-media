@@ -3,52 +3,18 @@
 # Format: [energy, pace] text  ·  ~ glues to previous line  ·  (beat) pause  ·  empty line = new section  ·  # = note
 
 SCRIPT = """
-# THREE WAYS OUT
-[0.6,0.45] So if the bill always comes, how do countries actually pay it? History shows three ways out.
+# FIFTH WAY (Lak's view)
+[0.6,0.45] But the person behind this channel sees a fifth way. And it's already law.
 
-[0.65,0.4] Way one: the painful one. Cut.
+[0.6,0.45] In July twenty twenty-five, America passed the GENIUS Act. Dollar stablecoins must now be backed one to one by safe assets, like cash and short-term US Treasury bills.
 
-[0.6,0.45] In January nineteen ninety-five, the Wall Street Journal called Canada "an honorary member of the Third World".
+[0.6,0.45] So when someone in Lagos, Cairo or Casablanca holds a digital dollar from a big American company, part of that money is lending to the US Treasury.
 
-[0.65,0.4] Its federal debt was close to seventy percent of its economy.
+[0.65,0.4] America's Treasury Secretary has said he expects stablecoins to become a big new buyer of US debt.
 
-[0.6,0.45] A month later, the finance minister, Paul Martin, delivered a budget that cut spending hard. About seven dollars of cuts for every dollar of new taxes.
+[0.6,0.45] His view: that's how America gets the whole world to fund its debt. Quietly. One phone wallet at a time.
 
-[0.65,0.4] Within three years, Canada had a surplus. By two thousand and nine, its federal debt was down to twenty-nine percent.
-
-[0.6,0.45] It worked. But it hurt. The provinces, hospitals and public workers paid for it.
-
-[0.65,0.4] Way two: the lucky one. Grow.
-
-[0.6,0.45] In the nineteen-nineties, America raised some taxes, held back spending, and then the tech boom poured money into the budget.
-
-[0.65,0.4] From nineteen ninety-eight to two thousand and one, the US ran surpluses. The first since nineteen sixty-nine.
-
-[0.6,0.45] The debt the public held fell from about forty-eight percent of the economy to thirty-one.
-
-[0.65,0.4] Growth did the heavy lifting. But that needs a boom, and a Congress that agrees.
-
-[0.65,0.4] Way three: the ugly one. Ask for help.
-
-[0.6,0.45] In nineteen seventy-six, Britain's inflation had been close to twenty-five percent, and the pound hit a record low.
-
-[0.6,0.45] It asked the International Monetary Fund for a three point nine billion dollar loan. The largest the fund had ever been asked for.
-
-[0.65,0.4] In return, Britain had to cut spending anyway. On someone else's terms.
-
-[0.6,0.45] It paid the loan back by nineteen seventy-nine. But "going to the IMF" became a national humiliation.
-
-[0.65,0.4] And there's a fourth way. The quiet one we just talked about. Inflate.
-
-[0.6,0.45] So which way will America take?
-
-[0.65,0.4] Cutting like Canada needs both parties to agree on cuts and taxes. That's rare in Washington.
-
-[0.6,0.45] Growing like the nineties needs a boom. Some say AI could be that boom. That's a big bet.
-
-[0.65,0.4] And the IMF can't bail out the country that prints the world's money.
-
-[0.6,0.45] Which leaves the quiet way. A little more inflation, every year.
+[0.6,0.45] So the likely path isn't one way. It's the quiet two together. A little more inflation, and the world lending through stablecoins.
 
 [0.65,0.4] That's why, for your money, the twist matters more than the clock.
 """
@@ -244,16 +210,16 @@ for kind, val in items:
     out.append(wav); last_text, pending = text, None
 
 full = torch.cat(out, dim=1)
-torchaudio.save('/kaggle/working/TAL_videoD_ext.wav', full, SR)
-json.dump(report, open('/kaggle/working/qc_report_dext.json', 'w'), indent=1)
+torchaudio.save('/kaggle/working/TAL_videoD_ext2.wav', full, SR)
+json.dump(report, open('/kaggle/working/qc_report_dext2.json', 'w'), indent=1)
 bad = [r for r in report if r['match'] < QC_MIN_SCORE]
-print('Done:', round(full.shape[1] / 60 / SR, 1), 'minutes -> /kaggle/working/TAL_videoD_ext.wav')
+print('Done:', round(full.shape[1] / 60 / SR, 1), 'minutes -> /kaggle/working/TAL_videoD_ext2.wav')
 print(f'Quality check: {total - len(bad)}/{total} lines clean.' + (' Listen to these:' if bad else ''))
 for r in bad: print(f"  line {r['line']}: wanted '{r['text'][:60]}'  heard '{r['heard'][:60]}'")
 
 # --- Auto-hand-off to Claude: upload the narration to a 1-hour temporary link ---
 import subprocess
 _r = subprocess.run(['curl', '-s', '-F', 'reqtype=fileupload', '-F', 'time=1h',
-                     '-F', 'fileToUpload=@/kaggle/working/TAL_videoD_ext.wav',
+                     '-F', 'fileToUpload=@/kaggle/working/TAL_videoD_ext2.wav',
                      'https://litterbox.catbox.moe/resources/internals/api.php'], capture_output=True, text=True)
 print('CLAUDE LINK:', _r.stdout.strip())

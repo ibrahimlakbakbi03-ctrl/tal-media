@@ -127,6 +127,14 @@ def qc_score(wav, text):
     if not a: return 1.0, heard
     return difflib.SequenceMatcher(None, a, b).ratio(), heard
 
+# Name guard: a take is rejected if the ASR hears a bad version of a protected name (e.g. 'pay-pee' for Pape)
+NAME_GUARD = {'Pape': re.compile(r"pay[- ]?pe?e|pay-p\b|\bpap(e)?y\b|\bpapi\b|pappy|\bpaper\b|papee|pa-pe|peppy", re.I)}
+GUARD_SEEDS = [42, 7, 123, 2024, 99, 314]
+def guard_ok(text, heard):
+    for name, bad in NAME_GUARD.items():
+        if name in text and bad.search(heard): return False
+    return True
+
 def sil(sec): return torch.zeros(1, int(SR * max(sec, 0)))
 
 def natural_pause(text):
@@ -177,11 +185,13 @@ for kind, val in items:
     ex = min(ex, 0.75)
     say = spoken(text)
     best = None
-    for t, seed in enumerate(SEEDS):
+    guarded = any(nm in text for nm in NAME_GUARD)
+    for t, seed in enumerate(GUARD_SEEDS if guarded else SEEDS):
         torch.manual_seed(seed)
         wav = model.generate(say, audio_prompt_path=REF, exaggeration=ex, cfg_weight=cfg, temperature=TEMPERATURE)
         wav = trim(stretch(wav.cpu(), spd))
         score, heard = qc_score(wav, text) if asr else (1.0, '')
+        if asr and not guard_ok(text, heard): score = min(score, 0.5)
         if best is None or score > best[0]: best = (score, wav, heard, t + 1)
         if score >= QC_MIN_SCORE: break
     score, wav, heard, takes = best

@@ -3,26 +3,18 @@
 # Format: [energy, pace] text  ·  ~ glues to previous line  ·  (beat) pause  ·  empty line = new section  ·  # = note
 
 SCRIPT = """
-# FIXES
-[0.65,0.4] His vice president, J. D. Vance, is pushing for a deal. Qatar is mediating a draft agreement.
+# PAPE TEST
+[0.6,0.45] Option one. Robert Payp. In Payp's world, oil spikes.
 
-[0.65,0.4] Meanwhile, tankers have been hit near the Strait of Hormuz and off Qatar. Ship traffic through the strait is under sixty percent of normal.
+[0.6,0.45] Option two. Robert Paype. In Paype's world, oil spikes.
 
-[0.65,0.4] Point for Pape. But both of those were short, limited campaigns. Days, not weeks.
+[0.6,0.45] Option three. Robert Peyp. In Peyp's world, oil spikes.
 
-[0.7,0.4] In Pape's world: oil spikes, gold rises, stocks fall. In Jiang's world: oil drifts lower until January. Then the risk comes back.
+[0.6,0.45] Option four. Robert Payyp. In Payyp's world, oil spikes.
 
-[0.65,0.4] Every scenario in this video runs through our region. The strait, the tankers, the islands, the mediators in Doha.
+[0.6,0.45] Option five. Robert Pape. In Pape's world, oil spikes.
 
-[0.65,0.4] If oil jumps and stock indexes fall hard, the market is pricing in Pape.
-
-[0.6,0.45] And if the political temperature in Washington starts rising after the vote, that tips it toward Pape.
-
-[0.6,0.45] Two: US forces seizing Kharg or Qeshm Island. Pape points that way. Jiang says no.
-
-[0.6,0.45] Four: Russian strikes that knock out most of the power in Ukraine's big cities around Thanksgiving. Pape says yes.
-
-[0.65,0.4] Three: watch three numbers. The price of Brent. Ship traffic through Hormuz. And news from the talks in Doha.
+[0.6,0.45] Option six. Robert Paip. In Paip's world, oil spikes.
 """
 
 DEFAULT_EX, DEFAULT_CFG, DEFAULT_SPEED = 0.55, 0.45, 1.0
@@ -79,7 +71,6 @@ PRON = {
     'OpenAI': 'Open A. I.',
     'Nvidia': 'En-vidia',
     'Dalio': 'Dal-yo',
-    'Pape': 'Paip',
     'Qeshm': 'Kesh-um',
     'Kharg': 'Karg',
     'Natanz': 'Nah-tanz',
@@ -206,16 +197,16 @@ for kind, val in items:
     out.append(wav); last_text, pending = text, None
 
 full = torch.cat(out, dim=1)
-torchaudio.save('/kaggle/working/TAL_videoE_fix.wav', full, SR)
-json.dump(report, open('/kaggle/working/qc_report_fix.json', 'w'), indent=1)
+torchaudio.save('/kaggle/working/TAL_pape_test.wav', full, SR)
+json.dump(report, open('/kaggle/working/qc_report_test.json', 'w'), indent=1)
 bad = [r for r in report if r['match'] < QC_MIN_SCORE]
-print('Done:', round(full.shape[1] / 60 / SR, 1), 'minutes -> /kaggle/working/TAL_videoE_fix.wav')
+print('Done:', round(full.shape[1] / 60 / SR, 1), 'minutes -> /kaggle/working/TAL_pape_test.wav')
 print(f'Quality check: {total - len(bad)}/{total} lines clean.' + (' Listen to these:' if bad else ''))
 for r in bad: print(f"  line {r['line']}: wanted '{r['text'][:60]}'  heard '{r['heard'][:60]}'")
 
 # --- Auto-hand-off to Claude: upload the narration to a 1-hour temporary link ---
 import subprocess
 _r = subprocess.run(['curl', '-s', '-F', 'reqtype=fileupload', '-F', 'time=1h',
-                     '-F', 'fileToUpload=@/kaggle/working/TAL_videoE_fix.wav',
+                     '-F', 'fileToUpload=@/kaggle/working/TAL_pape_test.wav',
                      'https://litterbox.catbox.moe/resources/internals/api.php'], capture_output=True, text=True)
 print('CLAUDE LINK:', _r.stdout.strip())

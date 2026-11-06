@@ -158,7 +158,7 @@ def qc_score(wav, text):
     return difflib.SequenceMatcher(None, a, b).ratio(), heard
 
 # Name guard: a take is rejected if the ASR hears a bad version of a protected name (e.g. 'pay-pee' for Pape)
-NAME_GUARD = {'Pape': re.compile(r"pay[- ]?pe?e|pay-p\b|\bpap(e)?y\b|\bpapi\b|pappy|\bpaper\b|papee|pa-pe|peppy", re.I)}
+NAME_GUARD = {'Pape': re.compile(r"pay[- ]?pe?e|pay[- ]?p+\b|\bpope\b|\bpay points|\bpeip|\bpap(e)?y\b|\bpapi\b|pappy|\bpaper\b|papee|pa-pe|peppy", re.I)}
 GUARD_SEEDS = [42, 7, 123, 2024, 99, 314]
 def guard_ok(text, heard):
     for name, bad in NAME_GUARD.items():

@@ -1,4 +1,4 @@
-# VIDEO D · DALIO + 5 SHORTS · ONE RUN (5 Nov)
+# VIDEO E (+ Lak call) + VIDEO D FIXES · ONE RUN (6 Nov) · runs as a saved version
 # Run Cell 1, then Cell 2, then Cell 3 with the one-line loader.
 # Format: [energy, pace] text  ·  ~ glues to previous line  ·  (beat) pause  ·  empty line = new section  ·  # = note
 
@@ -94,6 +94,16 @@ SCRIPT = """
 [0.65,0.4] For Gulf economies, a quiet eight weeks means oil money keeps flowing and shipping slowly comes back.
 [0.7,0.4] A loud eight weeks means the region pays first. In shipping, in insurance, in the price of everything that comes through the strait.
 [0.6,0.45] And for importers like Morocco, every ten dollars on a barrel of oil shows up at the pump, and in the budget.
+
+# LAK'S CALL
+[0.6,0.45] From the person behind this channel.
+[0.65,0.4] Don't watch the headlines. Watch the markets.
+[0.65,0.4] If oil jumps and stock indexes fall hard, the market is pricing in Pape.
+[0.65,0.4] If oil keeps sliding and indexes keep climbing, Jiang is closer to right.
+[0.6,0.45] And if the political temperature in Washington starts rising after the vote, that tips it toward Pape.
+[0.6,0.45] But honestly? The world will keep turning either way.
+[0.65,0.4] So use this moment to build yourself. Your skills, your wealth, something that lasts.
+[0.65,0.4] Whatever happens, come out of it stronger.
 
 # THE TESTS
 [0.6,0.45] So here are the tests. Five things to watch before January third.

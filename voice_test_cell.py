@@ -26,9 +26,13 @@ COMMON = f"import json, numpy as np, soundfile as sf, torch, re\nW='{W}'\nTEXT=j
 # 0. transcript of the reference clip (Qwen clone needs it)
 pip('faster-whisper')
 run('ref_txt', COMMON + """
+import subprocess, os
+if os.path.exists(W+'/ref.txt'): raise SystemExit
 from faster_whisper import WhisperModel
+raw = subprocess.run(['ffmpeg','-nostdin','-loglevel','error','-i',W+'/ref.wav','-f','s16le','-ac','1','-ar','16000','-'], capture_output=True, check=True).stdout
+audio = np.frombuffer(raw, np.int16).astype(np.float32) / 32768.0
 m = WhisperModel('small.en', device='cuda', compute_type='float16')
-segs, _ = m.transcribe(W+'/ref.wav')
+segs, _ = m.transcribe(audio)
 open(W+'/ref.txt','w').write(' '.join(s.text.strip() for s in segs))
 """)
 
@@ -36,13 +40,16 @@ open(W+'/ref.txt','w').write(' '.join(s.text.strip() for s in segs))
 pip('-U', 'qwen-tts')
 run('qwen', COMMON + """
 from qwen_tts import Qwen3TTSModel
+import os
 dt = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
-cv = Qwen3TTSModel.from_pretrained('Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice', device_map='cuda:0', dtype=dt, attn_implementation='sdpa')
+need = [s for s in ['Ryan','Aiden'] if not os.path.exists(f'{W}/qwen_{s.lower()}.wav')]
+cv = None if not need else Qwen3TTSModel.from_pretrained('Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice', device_map='cuda:0', dtype=dt, attn_implementation='sdpa')
 ins = 'A confident, measured documentary narrator. Clear American English, calm authority, natural pauses.'
-for spk in ['Ryan', 'Aiden']:
+for spk in need:
     wavs, sr = cv.generate_custom_voice(text=TEXT, language='English', speaker=spk, instruct=ins)
     sf.write(f'{W}/qwen_{spk.lower()}.wav', wavs[0], sr)
 del cv; torch.cuda.empty_cache()
+if os.path.exists(W+'/qwen_clone.wav'): raise SystemExit
 base = Qwen3TTSModel.from_pretrained('Qwen/Qwen3-TTS-12Hz-1.7B-Base', device_map='cuda:0', dtype=dt, attn_implementation='sdpa')
 wavs, sr = base.generate_voice_clone(text=TEXT, language='English', ref_audio=W+'/ref.wav', ref_text=open(W+'/ref.txt').read())
 sf.write(f'{W}/qwen_clone.wav', wavs[0], sr)
@@ -75,7 +82,9 @@ def gen(text, voice):
     codes = [torch.tensor(l).unsqueeze(0).cuda() for l in (l1, l2, l3)]
     with torch.no_grad(): a = snac.decode(codes)
     return a.squeeze().float().cpu().numpy()
+import os
 for voice in ['dan', 'leo']:
+    if os.path.exists(f'{W}/orpheus_{voice}.wav'): continue
     parts = []
     for s in SENTS:
         parts += [gen(s, voice), np.zeros(int(24000 * 0.25), dtype=np.float32)]
@@ -85,6 +94,8 @@ for voice in ['dan', 'leo']:
 # 3. Chatterbox (MIT) cloning the current Tall reference = today's baseline
 pip('chatterbox-tts')
 run('chatterbox', COMMON + """
+import os
+if os.path.exists(W+'/chatterbox_clone.wav'): raise SystemExit
 import torchaudio as ta
 from chatterbox.tts import ChatterboxTTS
 m = ChatterboxTTS.from_pretrained(device='cuda')

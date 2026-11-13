@@ -17,7 +17,7 @@ def pip(*a):
     subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', *a], check=False)
 
 def run(name, code):
-    p = f'{W}/{name}.py'; open(p, 'w').write(code)
+    p = f'{W}/step_{name}.py'; open(p, 'w').write(code)
     r = subprocess.run([sys.executable, p], capture_output=True, text=True)
     print(f'[{name}] exit {r.returncode}', (r.stdout[-400:] + r.stderr[-1500:]) if r.returncode else 'ok')
 
@@ -37,7 +37,7 @@ open(W+'/ref.txt','w').write(' '.join(s.text.strip() for s in segs))
 """)
 
 # 1. Qwen3-TTS: two preset narrators + clone of our current Tall voice
-pip('-U', 'qwen-tts')
+pip('-U', 'qwen-tts', 'transformers==4.57.3')
 run('qwen', COMMON + """
 from qwen_tts import Qwen3TTSModel
 import os
@@ -58,6 +58,8 @@ sf.write(f'{W}/qwen_clone.wav', wavs[0], sr)
 # 2. Orpheus 3B (Apache 2.0), via transformers + SNAC decoder, sentence by sentence
 pip('snac', 'accelerate')
 run('orpheus', COMMON + """
+import os
+if all(os.path.exists(f'{W}/orpheus_{v}.wav') for v in ['dan','leo']): raise SystemExit
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from snac import SNAC
 M = 'unsloth/orpheus-3b-0.1-ft'

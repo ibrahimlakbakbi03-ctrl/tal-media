@@ -3,6 +3,9 @@
 # shuffles and shows players labelled Sample 1..N. The key is printed base64-encoded (no spoilers).
 import subprocess, sys, os, random, json, base64, urllib.request
 W = '/kaggle/working/vt'; os.makedirs(W, exist_ok=True)
+for _f in ['ref_txt.py','qwen.py','orpheus.py','chatterbox.py']:
+    if os.path.exists(f'{W}/{_f}'): os.remove(f'{W}/{_f}')
+import shutil; shutil.rmtree(f'{W}/__pycache__', ignore_errors=True); shutil.rmtree(f'{W}/blind', ignore_errors=True)
 REF_URL = 'https://raw.githubusercontent.com/ibrahimlakbakbi03-ctrl/tal-media/main/ref/TAL_reference_12s.wav'
 urllib.request.urlretrieve(REF_URL, f'{W}/ref.wav')
 TEXT = ("In the last three years, central banks have bought more gold than at any time in half a century. "

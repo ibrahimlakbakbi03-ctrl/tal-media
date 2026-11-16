@@ -12,7 +12,8 @@ subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', '-U', 'qwen-tts', 
 urllib.request.urlretrieve(REPO + '/ref/TAL_reference_12s.wav', W + '/ref_in.wav')
 subprocess.run(['ffmpeg', '-nostdin', '-y', '-loglevel', 'error', '-i', W + '/ref_in.wav', '-ac', '1', '-ar', '24000', W + '/ref.wav'], stdin=subprocess.DEVNULL)
 urllib.request.urlretrieve(REPO + '/' + JOB, W + '/job.json')
-json.dump({'PRON': PRON, 'TAKES': TAKES, 'NAME': NAME, 'NAMES_TEST': NAMES_TEST}, open(W + '/cfg.json', 'w'))
+TESTS = globals().get('TESTS')
+json.dump({'PRON': PRON, 'TAKES': TAKES, 'NAME': NAME, 'NAMES_TEST': NAMES_TEST, 'TESTS': TESTS}, open(W + '/cfg.json', 'w'))
 code = r'''
 import json, re, difflib, torch, numpy as np, soundfile as sf, librosa
 W = '%s'; cfg = json.load(open(W + '/cfg.json')); job = json.load(open(W + '/job.json'))
@@ -34,19 +35,35 @@ def prep(t):
 norm = lambda s: re.sub(r'[^a-z0-9 ]', ' ', s.lower().replace('-', ' ')).split()
 SKIP = {w for v in PRON.values() for w in norm(v)} | {w for k in PRON for w in norm(k)}
 def tidy(w, sr):
-    # keep speech, cap internal gaps at 0.42 s, keep natural short gaps; 25 ms fades at the edges
-    iv = librosa.effects.split(w, top_db=36, frame_length=1024, hop_length=256)
-    if len(iv) == 0: return w, 0.0
-    out = []; maxgap = 0.0
-    for j, (a, b) in enumerate(iv):
-        a = max(0, a - int(0.03*sr)); b = min(len(w), b + int(0.05*sr))
-        if j:
-            gap = (iv[j][0] - iv[j-1][1]) / sr; maxgap = max(maxgap, gap)
-            out.append(np.zeros(int(sr * min(max(gap, 0.06), 0.42)), np.float32))
-        out.append(w[a:b])
-    y = np.concatenate(out); f = int(0.025*sr)
-    y[:f] *= np.linspace(0, 1, f); y[-f:] *= np.linspace(1, 0, f)
-    return y, maxgap
+    # v3: never chop speech. Only real dead air (> 0.55 s below -42 dB of peak) is shortened to 0.34 s,
+    # joined with a 40 ms equal-power crossfade; edges trimmed gently with 30 ms fades. No micro gaps.
+    w = w - np.mean(w)
+    hop = int(0.01*sr); fr = int(0.03*sr)
+    rms = librosa.feature.rms(y=w, frame_length=fr, hop_length=hop)[0]
+    thr = np.max(rms) * 10**(-42/20); sil = rms < thr
+    voiced = np.where(~sil)[0]
+    if len(voiced) == 0: return w, 0.0
+    a0 = max(0, voiced[0]*hop - int(0.04*sr)); b0 = min(len(w), voiced[-1]*hop + fr + int(0.08*sr))
+    runs = []; k = voiced[0]
+    while k <= voiced[-1]:
+        if sil[k]:
+            st = k
+            while k <= voiced[-1] and sil[k]: k += 1
+            runs.append((st*hop, k*hop))
+        else: k += 1
+    maxgap = max([(b-a)/sr for a, b in runs], default=0.0)
+    y = w[a0:b0].copy(); off = a0; cf = int(0.04*sr)
+    for a, b in reversed(runs):
+        L = (b - a)/sr
+        if L <= 0.55: continue
+        keep = int(0.34*sr); a -= off; b -= off
+        cut_a = a + keep//2; cut_b = b - keep//2
+        if cut_b - cut_a <= 2*cf: continue
+        t = np.linspace(0, np.pi/2, cf)
+        mix = y[cut_a:cut_a+cf]*np.cos(t) + y[cut_b-cf:cut_b]*np.sin(t)
+        y = np.concatenate([y[:cut_a], mix, y[cut_b:]])
+    f = int(0.03*sr); y[:f] *= np.linspace(0, 1, f); y[-f:] *= np.linspace(1, 0, f)
+    return y.astype(np.float32), maxgap
 def take(text, seed):
     torch.manual_seed(seed)
     wavs, sr = m.generate_voice_clone(text=prep(text), language='English', voice_clone_prompt=prompt)
@@ -60,7 +77,7 @@ def best_take(text, i):
         a = [x for x in norm(text) if x not in SKIP]; b = [x for x in norm(heard) if x not in SKIP]
         sc = difflib.SequenceMatcher(None, a, b).ratio()
         wps = len(norm(text)) / (len(y)/sr)
-        pen = (0 if 2.4 <= wps <= 3.5 else 0.08) + (0.06 if maxgap > 0.9 else 0)
+        pen = (0 if 2.4 <= wps <= 3.4 else 0.08) + (0.06 if maxgap > 1.0 else 0)
         s = sc - pen
         if best is None or s > best[0]: best = (s, y, heard, wps, sc)
         if sc > 0.97 and pen == 0: break
@@ -75,7 +92,7 @@ for i, (text, section_end, pause) in enumerate(job):
 sf.write(f'{W}/{NAME}_raw.wav', np.concatenate(out), SR)
 json.dump(rep, open(W + '/report.json', 'w'))
 if cfg['NAMES_TEST']:
-    tests = [('Nvidia','En-vidia'),('Huang','Hwahng'),('Jiang','Jyahng'),('Qwen','Chwen'),('Kimi','Kee-mee'),
+    tests = cfg.get('TESTS') or [('Nvidia','En-vidia'),('Huang','Hwahng'),('Jiang','Jyahng'),('Qwen','Chwen'),('Kimi','Kee-mee'),
              ('Hassabis','Ha-sah-biss'),('Kiriakou','Kirry-ah-koo'),('Humain','Hu-mane'),('Hang Seng','Hahng Seng'),('Megaspeed','Mega speed')]
     for n, (a, b) in enumerate(tests, 1):
         parts = []

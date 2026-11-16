@@ -1,5 +1,5 @@
 # VIDEO F · FULL NARRATION (commit run). Old Tall voice (Qwen clone), Lak's name picks, flow + prosody fixes.
-REV = '__REV__'
+REV = '19d76b7'
 PRON = {'Jiang': 'Jee-yang', 'Kiriakou': 'Kiriyako'}
 NAME = 'TAL_videoF'; JOB = 'vF/narr_v4_full.json'; TAKES = 4; NAMES_TEST = False; TESTS = None
 exec(__import__('urllib.request').request.urlopen('https://raw.githubusercontent.com/ibrahimlakbakbi03-ctrl/tal-media/' + REV + '/narrate3_cell.py').read().decode())

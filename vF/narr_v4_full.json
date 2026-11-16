@@ -1,0 +1,322 @@
+[
+[
+"Billions of dollars of Nvidia's most powerful chips. Sold to a company with two employees. Boxes never even opened.",
+0,
+0.4
+],
+[
+"Last week, the man who sold them, the most important CEO in tech, walked away from his job, over a relationship US officials allege was a Chinese intelligence operation.",
+0,
+0.4
+],
+[
+"Everyone is asking: was he a victim, or was it a setup? That's the wrong question.",
+0,
+0.4
+],
+[
+"The right question is: why does China want these chips so badly? Because it is running a plan to win AI that almost nobody in the West has noticed.",
+0,
+0.4
+],
+[
+"And here's the sneaky part. China isn't trying to build the best AI. It's trying to make AI free.",
+0,
+0.4
+],
+[
+"Today: six rounds. The biggest names in AI against each other: Jensen Huang, Elon Musk, Professor Jiang, Demis Hassabis, Mark Zuckerberg. Every claim checked. Free AI versus paid AI. And at the end, I'll show you why China can win the AI race, and still lose the money race.",
+1,
+0.9
+],
+[
+"Megaspeed: a Singapore cloud company, and one of Nvidia's biggest foreign customers. When reporters went to look, they found two staff who couldn't say what it did, a Malaysian storefront with no engineers, and hardware still in its boxes.",
+0,
+0.4
+],
+[
+"Former CIA officer John Kiriakou calls it bad tradecraft.",
+0,
+0.5
+],
+[
+"A Megaspeed executive had a relationship with Jensen Huang. US officials allege she worked for Chinese intelligence. Huang admitted the affair. The board opened an investigation. Four days later, he stepped down.",
+0,
+0.4
+],
+[
+"Was she a spy, or was this a setup? Hold that thought. It's our final round. Because the chips are only the surface.",
+1,
+0.9
+],
+[
+"A year ago, at the Financial Times' AI summit, Jensen Huang said it out loud: China is going to win the AI race.",
+0,
+0.4
+],
+[
+"Hours later, Nvidia issued a new statement from Huang: China is nanoseconds behind America. And: It's vital that America wins by racing ahead.",
+0,
+0.4
+],
+[
+"Same man. Same day. Two answers. Why? Because he wanted to sell chips to China, and Washington had banned it.",
+0,
+0.4
+],
+[
+"Our check: at the very top, America still leads. Stanford's 2026 AI Index counted fifty notable US models last year, against thirty from China.",
+0,
+0.4
+],
+[
+"America wins the frontier. But that's not the race China is running.",
+1,
+0.9
+],
+[
+"In August 2025, China's government launched a plan called AI Plus: AI in seventy percent of devices and services by 2027. Ninety percent by 2030. AI like electricity. Like water.",
+0,
+0.4
+],
+[
+"The tool: free, open models. DeepSeek, Alibaba's Qwen, Kimi. Anyone can download them, for nothing.",
+0,
+0.4
+],
+[
+"America does the opposite. The best US models are closed. You rent them, by the month or by the question, because they cost tens of billions to build.",
+0,
+0.4
+],
+[
+"So who's winning? Chinese open models are now forty-one percent of all downloads on Hugging Face. America: thirty-six and a half. On OpenRouter, the biggest neutral AI marketplace, Chinese models reached about sixty-one percent of usage.",
+0,
+0.4
+],
+[
+"To be fair, one of the West's top China analysts calls the ninety percent target unbelievably optimistic. But China doesn't need ninety percent. It just needs to be the default.",
+0,
+0.4
+],
+[
+"And here's the trick. If the AI is free, who gets paid? Whoever sells the chips, the power, the phones and the factories that run it. Remember that.",
+1,
+0.9
+],
+[
+"Professor Jiang, the historian whose predictions have pulled millions of views, says American AI is definitely a bubble. And he describes a circle.",
+0,
+0.4
+],
+[
+"Nvidia invests up to one hundred billion dollars in OpenAI. The next day, OpenAI signs a three-hundred-billion-dollar deal with Oracle. And Oracle buys… Nvidia chips. When the payday doesn't come, Jiang says, the entire thing collapses.",
+0,
+0.4
+],
+[
+"Jensen's answer: we're early. This build-out takes years, not quarters.",
+0,
+0.4
+],
+[
+"Our check: the circle is real. Consulting firm Bain says that to justify about five hundred billion a year in data centres, the industry needs about two trillion a year in revenue. It's nowhere near that.",
+0,
+0.4
+],
+[
+"But here's our take. Even if it pops, remember 2000. The dot-com crash left cheap fibre-optic cable in the ground, and that cheap cable built Google, YouTube and Facebook. A pop doesn't kill American AI. It makes it cheaper.",
+1,
+0.9
+],
+[
+"Jiang goes further. He says AI isn't even impressive. It's just brute force. A giant database plus a lot of computers. That's why, he says, China copied it so fast, and so cheap.",
+0,
+0.4
+],
+[
+"Demis Hassabis, head of Google DeepMind, would disagree. His AI, AlphaFold, cracked a fifty-year-old problem in biology and predicted the shapes of about two hundred million proteins. It won him the 2024 Nobel Prize in Chemistry.",
+0,
+0.4
+],
+[
+"Our check: on the technology, Jiang is wrong. No database search wins a Nobel Prize.",
+0,
+0.4
+],
+[
+"But on the money, he's dangerous. If AI is easy to copy, it's hard to charge for. And charging for it is America's entire business model.",
+0,
+0.4
+],
+[
+"And that's when you remember: billions of dollars of chips, sitting in boxes. China isn't short of ideas. It's short of hardware. Which brings us to the real weapon.",
+1,
+0.9
+],
+[
+"Washington thinks chips decide this race. That's why it has blocked Nvidia's best chips from China since 2022.",
+0,
+0.4
+],
+[
+"Elon Musk thinks it's electricity. He says China will have more power than anyone else and probably will have more chips.",
+0,
+0.4
+],
+[
+"Our check: China already generates far more electricity than America, and adds more every year.",
+0,
+0.4
+],
+[
+"And it controls the raw materials chips are made from: around ninety-eight percent of the world's low-purity gallium, and most of its germanium. Since 2023, it has restricted exports of both.",
+0,
+0.4
+],
+[
+"And this week, the two sides collided for real. Musk signed the Stand With Jensen petition to bring Huang back as Nvidia's CEO. About a hundred and seventy-five thousand people signed, including more than seven thousand who say they work at Nvidia. Musk warned that without Huang, critical deals will be lost.",
+0,
+0.4
+],
+[
+"On the other side, Washington: Treasury Secretary Scott Bessent wants an outsider to run the company.",
+0,
+0.4
+],
+[
+"Why does Musk care so much? Officially, because Huang is the best builder in tech. But Musk is also one of Nvidia's biggest customers, and he's betting everything on infrastructure: power plants, data centres, rockets.",
+0,
+0.4
+],
+[
+"Our take: Musk wants what China has, the speed of a country that builds. But he wants it private, run by founders, not by the state. China builds AI infrastructure with the government. America is building it with billionaires. And right now, they're fighting Washington over who controls the most important chip company on Earth.",
+0,
+0.4
+],
+[
+"So America has the best chips. China has the power and the minerals those chips need. They need each other. Hold on to that for our final call.",
+1,
+0.9
+],
+[
+"Jiang's darkest claim: the real goal of AI isn't chatbots. It's control. Digital ID, digital money, every purchase tracked and predicted.",
+0,
+0.4
+],
+[
+"Mark Zuckerberg says the opposite: Will it be centralized and restricted to a few institutions, or will it be a tool that empowers everyone? His answer: everyone.",
+0,
+0.4
+],
+[
+"Our check: there's no public evidence of a control plan. But notice the irony. The man promising AI for everyone runs the biggest data-for-ads business on Earth.",
+1,
+0.9
+],
+[
+"Now, the question everyone's asking.",
+0,
+0.5
+],
+[
+"The spy case: US officials, through the Financial Times and the New York Times, allege she was recruited by China's Ministry of State Security. Huang admitted the relationship. His own board opened an investigation. He stepped down.",
+0,
+0.4
+],
+[
+"The setup case: Beijing calls it a smear. Nvidia's board says it has no reason to believe any secrets were compromised.",
+0,
+0.4
+],
+[
+"And a former Russian intelligence agent, on one of the world's biggest podcasts, had a different answer.",
+0,
+0.4
+],
+[
+"Her question: who profits?",
+0,
+0.55
+],
+[
+"Kiriakou's warning is darker. If it was an operation, the prize wasn't a chip. It was access: a CEO who talks to the White House about China and trade.",
+0,
+0.4
+],
+[
+"Our check: the relationship is admitted. The investigation is real. The spy part rests on intelligence that hasn't been made public.",
+0,
+0.4
+],
+[
+"And this story isn't over. Huang is reportedly weighing a comeback.",
+0,
+0.4
+],
+[
+"Either way, it proves the point of this whole video. The war isn't over chatbots. It's over chips, power and minerals.",
+1,
+0.9
+],
+[
+"And from our side of the world: the Gulf is one of the biggest funders of America's AI build-out: Abu Dhabi's MGX, the Stargate UAE campus, Saudi Arabia's Humain. That's a bet on paid AI.",
+0,
+0.4
+],
+[
+"But for countries like ours, China's free models are an opportunity: build your own tools without paying rent to Silicon Valley.",
+1,
+0.9
+],
+[
+"So, final score: free AI three, paid AI one. China is winning the AI race.",
+0,
+0.4
+],
+[
+"But here's the twist I promised. China can win the AI race, and still lose the money race.",
+0,
+0.4
+],
+[
+"Free AI builds China's economy: its factories, its power plants, its Belt and Road. But free doesn't pay shareholders. Paid AI does. And that money flows to America.",
+0,
+0.4
+],
+[
+"Even Nvidia, in the middle of a spy scandal, after its worst week since 2022, traded around twelve times next year's expected earnings: its cheapest since 2013. On that podcast, the former spies agreed: Nvidia survives this.",
+0,
+0.4
+],
+[
+"So, two calls, on the record.",
+0,
+0.5
+],
+[
+"Prediction Ledger number five: by the end of 2027, the Nasdaq 100 beats the Hang Seng Tech Index, measured from today's close.",
+0,
+0.4
+],
+[
+"Prediction Ledger number six: by the same date, America lets Nvidia sell its top chips to China again. Because in the end, they need each other.",
+0,
+0.4
+],
+[
+"What proves us wrong: a bubble pop hits the expensive Nasdaq hardest, and rates above five percent hurt growth stocks most. We'll score it publicly either way. Not financial advice: it's a map.",
+1,
+0.9
+],
+[
+"Now you tell me: in five years, will you be paying for AI, or getting it free? Tell me in the comments.",
+0,
+0.4
+],
+[
+"Same world. Different lens.",
+1,
+0.9
+]
+]

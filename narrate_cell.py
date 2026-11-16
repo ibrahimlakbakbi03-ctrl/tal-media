@@ -6,7 +6,7 @@ REPO = 'https://raw.githubusercontent.com/ibrahimlakbakbi03-ctrl/tal-media/' + g
 JOB = globals().get('JOB', 'vF/narr_test.json'); NAME = globals().get('NAME', 'TAL_test')
 TAKES = globals().get('TAKES', 3)
 subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', '-U', 'qwen-tts', 'transformers==4.57.3'], check=False)
-urllib.request.urlretrieve(REPO + '/ref/TAL_voice_v1.mp3', W + '/ref.mp3')
+urllib.request.urlretrieve(REPO + '/' + globals().get('REF_FILE', 'ref/TAL_voice_v1.mp3'), W + '/ref.mp3')
 subprocess.run(['ffmpeg', '-nostdin', '-y', '-loglevel', 'error', '-i', W + '/ref.mp3', '-ac', '1', '-ar', '24000', W + '/ref.wav'], stdin=subprocess.DEVNULL)
 urllib.request.urlretrieve(REPO + '/' + JOB, W + '/job.json')
 REF_TEXT = ("In the last three years, central banks have bought more gold than at any time in half a century. "
@@ -15,7 +15,8 @@ REF_TEXT = ("In the last three years, central banks have bought more gold than a
             "They're buying it because they no longer fully trust the one asset that has run the world since 1971: the US dollar. "
             "So the real question isn't whether gold goes up. "
             "It's what these banks know, that most investors still don't.")
-open(W + '/ref.txt', 'w').write(REF_TEXT)
+REF_TEXT = globals().get('REF_TEXT_OVERRIDE', REF_TEXT)
+open(W + '/ref.txt', 'w').write(REF_TEXT or '')
 code = f"""
 import json, os, re, difflib, torch, numpy as np, soundfile as sf, librosa
 W='{W}'; TAKES={TAKES}; NAME='{NAME}'
@@ -23,9 +24,12 @@ job = json.load(open(W+'/job.json'))
 from qwen_tts import Qwen3TTSModel
 dt = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
 m = Qwen3TTSModel.from_pretrained('Qwen/Qwen3-TTS-12Hz-1.7B-Base', device_map='cuda:0', dtype=dt, attn_implementation='sdpa')
-prompt = m.create_voice_clone_prompt(ref_audio=W+'/ref.wav', ref_text=open(W+'/ref.txt').read())
 from transformers import pipeline
 asr = pipeline('automatic-speech-recognition', model='openai/whisper-small.en', device=0, torch_dtype=torch.float16)
+rt = open(W+'/ref.txt').read().strip()
+if not rt:
+    rt = asr(W+'/ref.wav')['text'].strip(); open(W+'/ref.txt','w').write(rt)
+prompt = m.create_voice_clone_prompt(ref_audio=W+'/ref.wav', ref_text=rt)
 norm = lambda s: re.sub(r'[^a-z0-9 ]', ' ', s.lower()).split()
 SR = None; out = []; report = []
 for i, (text, pause) in enumerate(job):
@@ -58,4 +62,5 @@ from IPython.display import Audio, display, HTML
 if os.path.exists(W + '/report.json'):
     for n, sc, wps, heard in json.load(open(W + '/report.json')):
         print(f'part {n:02d}  accuracy {sc:.3f}  words/sec {wps}', ('  CHECK: ' + heard) if heard else '')
-display(HTML(f'<h3>{NAME}: listen for flow</h3>')); display(Audio(f'{W}/{NAME}.mp3'))
+if not globals().get('QUIET'):
+    display(HTML(f'<h3>{NAME}: listen for flow</h3>')); display(Audio(f'{W}/{NAME}.mp3'))

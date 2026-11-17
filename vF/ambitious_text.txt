@@ -1,5 +1,5 @@
-Claim: a famous face and their quote.
-Opposite: another famous face and their quote.
-Our check: data or a chart.
-Verdict stamp: TRUE / PARTLY / FALSE / UNPROVEN.
 When reporters from the New York Times walked into the office of one of Nvidia's biggest customers, a company that had bought billions of dollars of the most powerful AI chips on Earth, and they found two employees and boxes that had never even been opened.
+And last week, the man who sold those chips, the most important CEO in tech, walked away from his job over a relationship that US officials allege was a Chinese intelligence operation.
+Now, everyone is asking whether he was a victim or whether this was a setup, but that's actually the wrong question.
+The real question is why China wants these chips so badly, because it's running a plan to win AI that almost nobody in the West has noticed, and the sneaky part is that China isn't trying to build the best AI at all. It's trying to make AI free.
+So today we're putting the biggest names in AI against each other, Jensen Huang, Elon Musk, Professor Jiang, Demis Hassabis and Mark Zuckerberg, across six rounds where every claim gets checked. And at the end, I'll show you why China can win the AI race and still lose the money race.

@@ -1,0 +1,5 @@
+Claim: a famous face and their quote.
+Opposite: another famous face and their quote.
+Our check: data or a chart.
+Verdict stamp: TRUE / PARTLY / FALSE / UNPROVEN.
+When reporters from the New York Times walked into the office of one of Nvidia's biggest customers, a company that had bought billions of dollars of the most powerful AI chips on Earth, and they found two employees and boxes that had never even been opened.

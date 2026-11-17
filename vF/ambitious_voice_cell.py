@@ -3,7 +3,7 @@
 #   IndexTTS-2.5 (bilibili licence, free under 100M MAU): emotion steered by a text description
 # Blind players "Engine 1..N". Each engine runs in its own subprocess; failures are reported, not fatal.
 import subprocess, sys, os, json, random, urllib.request, shutil
-REV = 'b4e328e'; REPO = 'https://raw.githubusercontent.com/ibrahimlakbakbi03-ctrl/tal-media/' + REV
+REV = 'bd4887f' + REV
 W = '/kaggle/working/amb'; os.makedirs(W, exist_ok=True)
 def sh(cmd, cwd=None):
     r = subprocess.run(cmd, shell=True, cwd=cwd, capture_output=True, text=True, stdin=subprocess.DEVNULL)

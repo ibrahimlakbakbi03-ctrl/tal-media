@@ -1,8 +1,8 @@
 # main env: build a ~20 s Tall reference cut at a sentence pause + whisper transcript
 import subprocess, re, json, sys
-AB = sys.argv[1]
+AB = sys.argv[1]; SRC = sys.argv[2] if len(sys.argv) > 2 else AB + '/TAL_voice_v1.mp3'
 full = AB + '/ref_full.wav'
-subprocess.run(['ffmpeg','-nostdin','-y','-loglevel','error','-i',AB+'/TAL_voice_v1.mp3','-ac','1','-ar','24000',full])
+subprocess.run(['ffmpeg','-nostdin','-y','-loglevel','error','-i',SRC,'-ac','1','-ar','24000',full])
 r = subprocess.run(['ffmpeg','-nostdin','-i',full,'-af','silencedetect=noise=-35dB:d=0.22','-f','null','-'],capture_output=True,text=True).stderr
 st = [float(x) for x in re.findall(r'silence_start: ([\d.]+)', r)]; en = [float(x) for x in re.findall(r'silence_end: ([\d.]+)', r)]
 gaps = [(a+b)/2 for a, b in zip(st, en) if 12 <= (a+b)/2 <= 21]

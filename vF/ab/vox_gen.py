@@ -18,10 +18,10 @@ STYLE = '(confident, engaged documentary narrator, natural energy, medium pace)'
 for i, t in enumerate(lines, 1):
     for k in range(TAKES):
         for v in ('V1', 'V2'):
-            kw = dict(cfg_value=2.0, inference_timesteps=16, max_len=min(4096, max(256, len(t)*6)), retry_badcase=False, retry_badcase_max_times=1, seed=1000*i + k)
+            kw = dict(cfg_value=2.0, inference_timesteps=16, max_len=min(4096, max(256, len(t)*6)), retry_badcase=False, retry_badcase_max_times=1)
             if v == 'V1': kw.update(text=t, prompt_wav_path=R, prompt_text=ref['text'], reference_wav_path=R)
             else: kw.update(text=STYLE + t, reference_wav_path=R)
-            t0 = time.time()
+            torch.manual_seed(1000*i + k); t0 = time.time()
             try:
                 w = np.asarray(m.generate(**kw), np.float32).reshape(-1)
                 sf.write(f'{AB}/takes/{v}_L{i}_s{k}.wav', w, SR)

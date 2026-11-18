@@ -11,20 +11,27 @@ get(REPO + '/vF/ab_job.json', AB + '/lines.json'); get(REPO + '/ref/TAL_voice_v1
 os.makedirs('/tmp/cosy_sidecar', exist_ok=True); get(VS + 'main.py', '/tmp/cosy_sidecar/main.py'); get(VS + 'requirements.txt', '/tmp/cosy_req.txt')
 subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', 'uv'], check=False)
 print(subprocess.run('nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv', shell=True, capture_output=True, text=True).stdout)
-r = subprocess.run([sys.executable, AB + '/ref_step.py', AB], capture_output=True, text=True); print(r.stdout[-600:], r.stderr[-1500:] if r.returncode else '')
 CU = 'https://download.pytorch.org/whl/cu126'
-VOX = f'''set -x; export UV_LINK_MODE=copy; uv venv -q /tmp/venv_vox --python 3.11 && export VIRTUAL_ENV=/tmp/venv_vox &&
-uv pip install -q torch==2.7.1 torchaudio==2.7.1 torchcodec==0.4.0 voxcpm==2.0.3 soundfile huggingface_hub --extra-index-url {CU} --index-strategy unsafe-best-match &&
+QPY = '/tmp/venv_q/bin/python'
+# Kaggle's image sets UV_SYSTEM_PYTHON=true, which makes uv ignore venvs: every install below names its venv's python explicitly.
+QENV = f'''unset UV_SYSTEM_PYTHON; export UV_LINK_MODE=copy; uv venv -q --seed /tmp/venv_q --python 3.11 &&
+uv pip install -q --python {QPY} torch==2.7.1 torchaudio==2.7.1 --index-url {CU} &&
+printf 'torch==2.7.1\\ntorchaudio==2.7.1\\n' > /tmp/q_c.txt &&
+uv pip install -q --python {QPY} -c /tmp/q_c.txt qwen-tts transformers==4.57.3 accelerate librosa soundfile speechbrain ipython --extra-index-url {CU} --index-strategy unsafe-best-match'''
+r = subprocess.run(['bash', '-c', QENV], capture_output=True, text=True); print('venv_q', r.returncode, r.stderr[-1500:] if r.returncode else '')
+r = subprocess.run([QPY, AB + '/ref_step.py', AB], capture_output=True, text=True); print(r.stdout[-600:], r.stderr[-1500:] if r.returncode else '')
+VOX = f'''set -x; unset UV_SYSTEM_PYTHON; export UV_LINK_MODE=copy; uv venv -q /tmp/venv_vox --python 3.11 &&
+uv pip install -q --python /tmp/venv_vox/bin/python torch==2.7.1 torchaudio==2.7.1 torchcodec==0.4.0 voxcpm==2.0.3 soundfile huggingface_hub --extra-index-url {CU} --index-strategy unsafe-best-match &&
 /tmp/venv_vox/bin/python {AB}/vox_gen.py {AB} {TK}'''
 C = '074ca6dc9e80a2f424f1f74b48bdd7d3fea531cc'; M = 'dd9105b34bf2be2230f4aa1e4769fb586a3c824e'; P = 'f31ad88d543fdaebbda2d0c9a5e4d4f991ae0b6c'; WD = 'd625e7608ca23a870018f01e7c562ac683d9847f'
-COSY = f'''set -x; export UV_LINK_MODE=copy; cd /tmp && rm -rf CosyVoice CosyVoice-{C} &&
+COSY = f'''set -x; unset UV_SYSTEM_PYTHON; export UV_LINK_MODE=copy; cd /tmp && rm -rf CosyVoice CosyVoice-{C} &&
 curl -sL https://github.com/FunAudioLLM/CosyVoice/archive/{C}.tar.gz | tar xz && mv CosyVoice-{C} CosyVoice && mkdir -p CosyVoice/third_party && cd CosyVoice/third_party && rm -rf Matcha-TTS PyWorld &&
 curl -sL https://github.com/shivammehta25/Matcha-TTS/archive/{M}.tar.gz | tar xz && mv Matcha-TTS-{M} Matcha-TTS &&
 curl -sL https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder/archive/{P}.tar.gz | tar xz && mv Python-Wrapper-for-World-Vocoder-{P} PyWorld && rm -rf PyWorld/lib/World &&
 curl -sL https://github.com/mmorise/World/archive/{WD}.tar.gz | tar xz && mv World-{WD} PyWorld/lib/World && cd /tmp &&
-printf 'torch==2.7.0\\ntorchaudio==2.7.0\\n' > /tmp/cosy_c.txt && uv venv -q /tmp/venv_cosy --python 3.10 && export VIRTUAL_ENV=/tmp/venv_cosy &&
-uv pip install -q torch==2.7.0 torchaudio==2.7.0 --index-url {CU} &&
-uv pip install -q -c /tmp/cosy_c.txt -r /tmp/cosy_req.txt /tmp/CosyVoice/third_party/PyWorld huggingface_hub --extra-index-url {CU} --index-strategy unsafe-best-match &&
+printf 'torch==2.7.0\\ntorchaudio==2.7.0\\n' > /tmp/cosy_c.txt && uv venv -q /tmp/venv_cosy --python 3.10 &&
+uv pip install -q --python /tmp/venv_cosy/bin/python torch==2.7.0 torchaudio==2.7.0 --index-url {CU} &&
+uv pip install -q --python /tmp/venv_cosy/bin/python -c /tmp/cosy_c.txt -r /tmp/cosy_req.txt /tmp/CosyVoice/third_party/PyWorld huggingface_hub --extra-index-url {CU} --index-strategy unsafe-best-match &&
 /tmp/venv_cosy/bin/python - <<'PY'
 import glob, shutil, os
 from huggingface_hub import snapshot_download
@@ -42,9 +49,11 @@ for name, script in [('vox', VOX), ('cosy', COSY)]:
     procs[name] = subprocess.Popen(['bash', f'/tmp/{name}.sh'], stdout=open(f'{AB}/{name}.log', 'w'), stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL)
 # Q: the old formula, exactly as used for Video F v5 (12 s Tall reference, Qwen3-TTS Base clone, scored takes)
 ns = dict(WDIR=AB + '/q', REV=REV, JOB='vF/ab_job.json', NAME='Q', TAKES=4, NAMES_TEST=False, PACE=[2.3, 2.8])
+_py = sys.executable; sys.executable = QPY
 try: exec(urllib.request.urlopen(REPO + '/narrate5_cell.py').read().decode(), ns)
 except Exception as e: print('old formula failed:', repr(e)[:500])
-finally: open(AB + '/qwen_done', 'w').write('ok')
+finally:
+    sys.executable = _py; open(AB + '/qwen_done', 'w').write('ok')
 from IPython.display import clear_output, display, Audio, HTML
 clear_output(); print('old formula done; VoxCPM2 + CosyVoice 3 running')
 t0 = time.time()
@@ -56,8 +65,7 @@ while any(p.poll() is None for p in procs.values()):
 for n in procs:
     print(f'== {n} exit {procs[n].returncode}, takes:', len(glob.glob(f'{AB}/takes/{"V" if n == "vox" else "C"}*.wav')))
     if procs[n].returncode: print(open(f'{AB}/{n}.log').read()[-2500:])
-subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', 'speechbrain'], check=False)
-r = subprocess.run([sys.executable, AB + '/score_step.py', AB], capture_output=True, text=True); print(r.stdout[-3000:], r.stderr[-2500:] if r.returncode else '')
+r = subprocess.run([QPY, AB + '/score_step.py', AB], capture_output=True, text=True); print(r.stdout[-3000:], r.stderr[-2500:] if r.returncode else '')
 MASTER = ('highpass=f=70,lowshelf=f=120:g=1.5,equalizer=f=300:t=q:w=1.0:g=-3,equalizer=f=3000:t=q:w=1.4:g=2.5,'
           'deesser=i=0.35:m=0.5:f=0.5,acompressor=threshold=-21dB:ratio=2.5:attack=8:release=120:makeup=2,'
           'alimiter=limit=0.84,loudnorm=I=-14:TP=-1.5:LRA=7')

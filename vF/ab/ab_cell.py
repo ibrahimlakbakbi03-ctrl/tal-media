@@ -29,7 +29,7 @@ uv pip install -q -c /tmp/cosy_c.txt -r /tmp/cosy_req.txt /tmp/CosyVoice/third_p
 import glob, shutil, os
 from huggingface_hub import snapshot_download
 D = '/tmp/CosyVoice/pretrained_models/Fun-CosyVoice3-0.5B'
-inp = glob.glob('/kaggle/input/*/hf/hub/models--FunAudioLLM--Fun-CosyVoice3-0.5B-2512/snapshots/*')
+inp = glob.glob('/kaggle/input/**/models--FunAudioLLM--Fun-CosyVoice3-0.5B-2512/snapshots/*', recursive=True)
 if inp: shutil.copytree(inp[0], D, dirs_exist_ok=True)
 else: snapshot_download('FunAudioLLM/Fun-CosyVoice3-0.5B-2512', revision='29e01c4e8d000f4bcd70751be16fa94bf3d85a18', local_dir=D,
     allow_patterns=['cosyvoice3.yaml','config.json','configuration.json','campplus.onnx','speech_tokenizer_v3.onnx','llm.pt','flow.pt','hift.pt','CosyVoice-BlankEN/*'])

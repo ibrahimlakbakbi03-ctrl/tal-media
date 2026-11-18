@@ -5,7 +5,7 @@ while not os.path.exists(AB + '/qwen_done'): time.sleep(10)
 from huggingface_hub import snapshot_download
 import soundfile as sf, numpy as np, torch
 D = '/tmp/m/VoxCPM2'
-inp = glob.glob('/kaggle/input/*/hf/hub/models--openbmb--VoxCPM2/snapshots/*')
+inp = glob.glob('/kaggle/input/**/models--openbmb--VoxCPM2/snapshots/*', recursive=True)
 src = inp[0] if inp else snapshot_download('openbmb/VoxCPM2', cache_dir='/tmp/hf')
 if not os.path.exists(D): shutil.copytree(src, D, symlinks=False)
 cfgp = D + '/config.json'; c = json.load(open(cfgp)); print('config dtype', c.get('dtype')); c['dtype'] = 'float32'; json.dump(c, open(cfgp, 'w'))
